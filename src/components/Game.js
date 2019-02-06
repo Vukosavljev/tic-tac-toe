@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import Square from './Square'
 
-
 export default class Game extends Component {
     state = {
         squares: Array(9).fill(null),
@@ -29,13 +28,23 @@ export default class Game extends Component {
     }
     componentDidUpdate() {
         if (checkWinner(this.state.squares)) {
-            alert(`The winner is ${checkWinner(this.state.squares)}`)
+            console.log(`The winner is ${checkWinner(this.state.squares)}`)
         }
     }
+    changeBgColor = (index) => {
+        if(checkWinner(this.state.squares)[1].includes(index)) {
+            return { backgroundColor: 'aqua'}
+        }
+        return false;
+    }
+
     render() {
-    
     const squares = this.state.squares.map( (sq, index) => {
-        return <Square key={index} handelClick={() => !this.state.end ? this.handelClick(index) : null}>{sq}</Square>
+        return (<Square key={index} handelClick={() => !this.state.end ? this.handelClick(index) : null}
+        winnStyle={this.state.end ? this.changeBgColor(index) : null}
+        >
+        {sq}
+        </Square>)
     })
 
     return (
@@ -63,10 +72,10 @@ function checkWinner(array) {
       testArray.push(array[winArray[i]])
     }
     if (testArray.every( el => el === 'X')){
-      return 'X'
+      return ['X', winArray];
     }
     if (testArray.every( el => el === 'O')){
-      return 'O'
+      return ['O', winArray];
     }
   }
   return false
